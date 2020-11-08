@@ -61,6 +61,7 @@ class Game extends React.Component {
     makeGuess() {
         if(this.state.chances > 0) {
             const letter = document.getElementById('letter-input').value.toLowerCase();
+            document.getElementById('letter-input').value="";
             const guesses = this.state.guesses;
             guesses.push(letter);
             this.setState({ guesses: guesses });
@@ -80,6 +81,7 @@ class Game extends React.Component {
     }
 
     reset() {
+        document.getElementById('letter-input').value="";
         this.setState({
             word: getRandomWord(),
             chances: MAX_CHANCES,
@@ -87,7 +89,8 @@ class Game extends React.Component {
             console.log(this.state.word);
             this.setState({
                 frequencies: getFrequencies(this.state.word),
-                solved: "_".repeat(this.state.word.length).split("")
+                solved: "_".repeat(this.state.word.length).split(""),
+                guesses: []
             })
         });
     }
