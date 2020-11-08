@@ -44,7 +44,8 @@ class Game extends React.Component {
             word: getRandomWord(),
             frequencies: null,
             solved: null,
-            chances: MAX_CHANCES
+            chances: MAX_CHANCES,
+            guesses: []
         };
         this.makeGuess = this.makeGuess.bind(this);
         this.reset = this.reset.bind(this);
@@ -60,9 +61,13 @@ class Game extends React.Component {
     makeGuess() {
         if(this.state.chances > 0) {
             const letter = document.getElementById('letter-input').value.toLowerCase();
+            const guesses = this.state.guesses;
+            guesses.push(letter);
+            this.setState({ guesses: guesses });
             if(letter in this.state.frequencies) {
                 var positions = this.state.frequencies[letter];
                 var newSolved = this.state.solved;
+                
                 positions.forEach(position => {
                     newSolved[position] = letter;
                 });
@@ -98,6 +103,7 @@ class Game extends React.Component {
                 </button>
                 <button onClick={this.reset}>reset</button>
                 {this.state.solved && <p>{this.state.solved.join(" ")}</p>}
+                <p>Guessed Letters: {(this.state.guesses.length > 0) &&  this.state.guesses.join(" ")}</p>
                 <Hangman chances={this.state.chances}/>
             </div>
         );
