@@ -26,7 +26,13 @@ function getRandomWord() {
         "gap", "overlook", "contemporary", "differ", "achievement", "map",
         "horizon", "astonishing", "kinship", "response", "channel", "adult",
         "layout", "urgency", "contain", "soar", "pick", "transform", "bang",
-        "related", "dribble", "arise", "check", "affair", "recover"
+        "related", "dribble", "arise", "check", "affair", "recover", "user",
+        "pocket", "engine", "photocopy", "outer", "thigh", "metal", "heel", "outfit",
+        "coalition", "lunch", "despair", "operation", "suffer", "pack", "warm", "know", "mole",
+        "freckle", "microphone", "stable", "swear", "mail", "replacement", "river", "spread",
+        "dive", "opposed", "weakness", "victory", "tap", "can", "method", "structure", "deficiency",
+        "torture", "woman", "enthusiasm", "threat", "waterfall", "father", "drop", "code", "nap",
+        "haircut", "like", "variant", "mud", "ghost", "deport"
     ];
     return words[Math.floor(Math.random() * words.length)];
 }
@@ -69,7 +75,16 @@ class Game extends React.Component {
     }
 
     reset() {
-        console.log('reset')
+        this.setState({
+            word: getRandomWord(),
+            chances: MAX_CHANCES,
+        }, () => {
+            console.log(this.state.word);
+            this.setState({
+                frequencies: getFrequencies(this.state.word),
+                solved: "_".repeat(this.state.word.length).split("")
+            })
+        });
     }
     
     render() {
