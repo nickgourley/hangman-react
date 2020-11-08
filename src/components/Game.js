@@ -45,7 +45,8 @@ class Game extends React.Component {
             frequencies: null,
             solved: null,
             chances: MAX_CHANCES,
-            guesses: []
+            guesses: [],
+            feedback: "Guess a letter to begin"
         };
         this.makeGuess = this.makeGuess.bind(this);
         this.reset = this.reset.bind(this);
@@ -56,6 +57,7 @@ class Game extends React.Component {
             frequencies: getFrequencies(this.state.word),
             solved: "_".repeat(this.state.word.length).split("")
         })
+        console.log(this.state.word);   
     }
 
     makeGuess() {
@@ -63,8 +65,17 @@ class Game extends React.Component {
             const letter = document.getElementById('letter-input').value.toLowerCase();
             document.getElementById('letter-input').value="";
             const guesses = this.state.guesses;
-            guesses.push(letter);
-            this.setState({ guesses: guesses });
+            console.log(guesses)
+            if(guesses.includes(letter)) {
+                this.setState({ feedback: letter + " has already been guessed" });
+            }
+            else if(letter == "") {
+                this.setState({ feedback: "You must enter a character to guess"});
+            }
+            else {
+                guesses.push(letter);
+                this.setState({ guesses: guesses });
+            }
             if(letter in this.state.frequencies) {
                 var positions = this.state.frequencies[letter];
                 var newSolved = this.state.solved;
@@ -76,7 +87,9 @@ class Game extends React.Component {
             }
             else {
                 this.setState({ chances: this.state.chances - 1})
+                
             }
+            
         }
     }
 
@@ -90,7 +103,8 @@ class Game extends React.Component {
             this.setState({
                 frequencies: getFrequencies(this.state.word),
                 solved: "_".repeat(this.state.word.length).split(""),
-                guesses: []
+                guesses: [],
+                feedback: "Guess a letter to begin"
             })
         });
     }
@@ -99,7 +113,7 @@ class Game extends React.Component {
         return (
             <div>
                 <p>{this.state.chances} chances left</p>
-                {(this.state.chances == 0) && <h3>GAME OVER!</h3>}
+                {(this.state.chances == 0) && <div><h3>GAME OVER!</h3><p>The word was: {this.state.word}</p></div>}
                 <input type="text" id="letter-input" maxLength="1"></input>
                 <button onClick={this.makeGuess}>
                     solve
@@ -107,6 +121,7 @@ class Game extends React.Component {
                 <button onClick={this.reset}>reset</button>
                 {this.state.solved && <p>{this.state.solved.join(" ")}</p>}
                 <p>Guessed Letters: {(this.state.guesses.length > 0) &&  this.state.guesses.join(" ")}</p>
+                {this.state.feedback && <p>{this.state.feedback}</p>}
                 <Hangman chances={this.state.chances}/>
             </div>
         );
